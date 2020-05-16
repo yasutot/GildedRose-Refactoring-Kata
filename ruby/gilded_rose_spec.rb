@@ -55,10 +55,7 @@ describe '#update_quality' do
     it 'quality value cannot be higher than 50' do
       items = [Item.new(@item_name, 10, 50)]
       GildedRose.new(items).update_quality
-      expect(items.first.quality).to eq 50
-    end
-
-    it 'decreases sell_in' do
+      expect(items.first.quality).to      @item_name = 'Aged Brie'
       items = [Item.new(@item_name, 10, 50)]
       GildedRose.new(items).update_quality
       expect(items.first.sell_in).to eq 9
@@ -181,7 +178,21 @@ describe '#update_quality' do
   end
 
   context 'when updates Conjured' do
-    it 'quality decreases by 2'
-    it 'quality decreases by 4 once sell by date has passed'
+    before do
+      @item_name = 'Conjured foo'
+    end
+
+    it 'quality decreases by 2' do
+      items = [Item.new(@item_name, 20, 10)]
+      GildedRose.new(items).update_quality
+      expect(items.first.quality).to eq 8
+    end
+
+    it 'quality decreases by 4 once sell by date has passed' do
+      items = [Item.new(@item_name, 0, 10)]
+      GildedRose.new(items).update_quality
+      expect(items.first.sell_in).to eq -1
+      expect(items.first.quality).to eq 6
+    end
   end
 end
