@@ -122,7 +122,7 @@ class CommonProcessor
   def process(item)
     item.quality = quality_value(item.sell_in, item.quality)
 
-    item.sell_in = -1
+    item.sell_in -= 1
   end
 
   def quality_value(sell_in, quality)
