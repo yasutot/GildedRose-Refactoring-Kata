@@ -37,15 +37,37 @@ describe '#update_quality' do
     it 'sell_in value can be lower than zero' do
       items = [Item.new('foo', 0, 0)]
       GildedRose.new(items).update_quality
-      expect(items.first.sell_in).to eq -1
+      expect(items.first.sell_in).to eq - 1
     end
   end
 
   context 'when updates Aged Brie' do
-    it 'increases quality'
-    it 'quality value cannot be higher than 50'
-    it 'decreases sell_in'
-    it 'sell_in value can be lower than zero'
+    before do
+      @item_name = 'Aged Brie'
+    end
+    it 'increases quality' do
+      items = [Item.new(@item_name, 10, 10)]
+      GildedRose.new(items).update_quality
+      expect(items.first.quality).to eq 11
+    end
+
+    it 'quality value cannot be higher than 50' do
+      items = [Item.new(@item_name, 10, 50)]
+      GildedRose.new(items).update_quality
+      expect(items.first.quality).to eq 50
+    end
+
+    it 'decreases sell_in' do
+      items = [Item.new(@item_name, 10, 50)]
+      GildedRose.new(items).update_quality
+      expect(items.first.sell_in).to eq 9
+    end
+
+    it 'sell_in value can be lower than zero' do
+      items = [Item.new(@item_name, 0, 50)]
+      GildedRose.new(items).update_quality
+      expect(items.first.sell_in).to eq - 1
+    end
   end
 
   context 'when updates Sulfuras' do
