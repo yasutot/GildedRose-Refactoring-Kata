@@ -51,6 +51,7 @@ class Updater
 
     return AgedBrieProcessor.new if name == ConditionalItemNames::AGED
     return SulfurasProcessor.new if name == ConditionalItemNames::SULF
+    return BackstageProcessor.new if name == ConditionalItemNames::BACK
 
     CommonProcessor.new
   end
@@ -72,6 +73,31 @@ end
 class SulfurasProcessor
   def process(item)
     item.quality = 80
+  end
+end
+
+# Backstage Pass update processor.
+class BackstageProcessor
+  def process(item)
+    item.quality = quality_value(item.sell_in, item.quality)
+
+    item.sell_in -= 1
+  end
+
+  def quality_value(sell_in, quality)
+    return 0 if sell_in.zero?
+
+    quality += quality_increase_value(sell_in)
+    quality = 50 if quality > 50
+
+    quality
+  end
+
+  def quality_increase_value(sell_in)
+    return 3 if sell_in.between?(1, 6)
+    return 2 if sell_in.between?(7, 10)
+
+    1
   end
 end
 
