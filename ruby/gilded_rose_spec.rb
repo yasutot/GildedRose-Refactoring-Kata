@@ -88,21 +88,95 @@ describe '#update_quality' do
   end
 
   context 'when updates Backstage Pass' do
-    it 'quality increases'
-    it 'quality value cannot be higher than 50'
-    it 'decreases sell_in'
-    it 'sell_in value can be lower than zero'
+    before do
+      @item_name = 'Backstage passes to a TAFKAL80ETC concert'
+    end
+
+    it 'quality increases' do
+      items = [Item.new(@item_name, 20, 11)]
+      GildedRose.new(items).update_quality
+      expect(items.first.quality).to eq 12
+    end
+
+    it 'quality value cannot be higher than 50' do
+      items = [Item.new(@item_name, 20, 50)]
+      GildedRose.new(items).update_quality
+      expect(items.first.quality).to eq 50
+    end
+
+    it 'decreases sell_in' do
+      items = [Item.new(@item_name, 20, 50)]
+      GildedRose.new(items).update_quality
+      expect(items.first.sell_in).to eq 19
+    end
+
+    it 'sell_in value can be lower than zero' do
+      items = [Item.new(@item_name, 0, 50)]
+      GildedRose.new(items).update_quality
+      expect(items.first.sell_in).to eq -1
+    end
 
     context 'between 6 to 10 days to concert' do
-      it 'quality increases by 2'
+      before do
+        @items = [Item.new(@item_name, 10, 0)]
+        @gilded_rose = GildedRose.new(@items)
+      end
+
+      it 'quality increases by 2' do
+        @gilded_rose.update_quality
+        expect(@items.first.sell_in).to eq 9
+        expect(@items.first.quality).to eq 2
+
+        @gilded_rose.update_quality
+        expect(@items.first.sell_in).to eq 8
+        expect(@items.first.quality).to eq 4
+
+        @gilded_rose.update_quality
+        expect(@items.first.sell_in).to eq 7
+        expect(@items.first.quality).to eq 6
+
+        @gilded_rose.update_quality
+        expect(@items.first.sell_in).to eq 6
+        expect(@items.first.quality).to eq 8
+      end
     end
 
     context '5 days or less to concert' do
-      it 'quality increases by 3'
+      before do
+        @items = [Item.new(@item_name, 5, 0)]
+        @gilded_rose = GildedRose.new(@items)
+      end
+
+      it 'quality increases by 3' do
+        @gilded_rose.update_quality
+        expect(@items.first.sell_in).to eq 4
+        expect(@items.first.quality).to eq 3
+
+        @gilded_rose.update_quality
+        expect(@items.first.sell_in).to eq 3
+        expect(@items.first.quality).to eq 6
+
+        @gilded_rose.update_quality
+        expect(@items.first.sell_in).to eq 2
+        expect(@items.first.quality).to eq 9
+
+        @gilded_rose.update_quality
+        expect(@items.first.sell_in).to eq 1
+        expect(@items.first.quality).to eq 12
+
+        @gilded_rose.update_quality
+        expect(@items.first.sell_in).to eq 0
+        expect(@items.first.quality).to eq 15
+      end
     end
 
     context 'after the concert' do
-      it 'quality drops to 0'
+      it 'quality drops to 0' do
+        items = [Item.new(@item_name, 0, 50)]
+        GildedRose.new(items).update_quality
+        expect(items.first.sell_in).to be_negative
+        expect(items.first.quality).to be_zero
+      end
     end
   end
 
