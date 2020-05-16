@@ -21,16 +21,16 @@ module Update
     def processor
       name = @item.name
 
-      return AgedBrieProcessor.new if name == ConditionalNames::AGED
-      return SulfurasProcessor.new if name == ConditionalNames::SULF
-      return BackstageProcessor.new if name.start_with?(ConditionalNames::BACK)
-      return ConjuredProcessor.new if name.start_with?(ConditionalNames::CONJ)
+      return AgedBrieProcessor if name == ConditionalNames::AGED
+      return SulfurasProcessor if name == ConditionalNames::SULF
+      return BackstageProcessor if name.start_with?(ConditionalNames::BACK)
+      return ConjuredProcessor if name.start_with?(ConditionalNames::CONJ)
 
-      CommonProcessor.new
+      CommonProcessor
     end
 
     def process
-      @processor.process(@item)
+      @processor.new.process(@item)
     end
   end
 
