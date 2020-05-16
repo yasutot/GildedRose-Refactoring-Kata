@@ -61,9 +61,8 @@ module Update
       return 0 if sell_in.zero?
 
       quality += quality_increase_value(sell_in)
-      quality = 50 if quality > 50
 
-      quality
+      50 if quality > 50
     end
 
     def quality_increase_value(sell_in)
