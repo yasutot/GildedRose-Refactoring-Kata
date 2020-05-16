@@ -73,7 +73,7 @@ module Update
     end
   end
 
-  # Strategy to process a Conjurer item update.
+  # Conjurer item update processor.
   class ConjuredProcessor
     def process(item)
       # Process the item update
