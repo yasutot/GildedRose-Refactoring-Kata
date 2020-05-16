@@ -49,7 +49,10 @@ class Updater
   def processor
     name = @item.name
 
-    AgedBrieProcessor.new if name == ConditionalItemNames::AGED
+    return AgedBrieProcessor.new if name == ConditionalItemNames::AGED
+    return SulfurasProcessor.new if name == ConditionalItemNames::SULF
+
+    CommonProcessor.new
   end
 
   def process
@@ -62,5 +65,28 @@ class AgedBrieProcessor
   def process(item)
     item.quality += 1 unless item.quality == 50
     item.sell_in -= 1
+  end
+end
+
+# Sulfuras update processor.
+class SulfurasProcessor
+  def process(item)
+    item.quality = 80
+  end
+end
+
+# Common item update processor.
+class CommonProcessor
+  def process(item)
+    item.quality = quality_value(item.sell_in, item.quality)
+
+    item.sell_in = -1
+  end
+
+  def quality_value(sell_in, quality)
+    return 0 if quality.zero?
+    return quality - 1 if sell_in.positive?
+
+    quality - 2
   end
 end

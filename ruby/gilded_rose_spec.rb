@@ -55,10 +55,7 @@ describe '#update_quality' do
     it 'quality value cannot be higher than 50' do
       items = [Item.new(@item_name, 10, 50)]
       GildedRose.new(items).update_quality
-      expect(items.first.quality).to      @item_name = 'Aged Brie'
-      items = [Item.new(@item_name, 10, 50)]
-      GildedRose.new(items).update_quality
-      expect(items.first.sell_in).to eq 9
+      expect(items.first.quality).to eq 50
     end
 
     it 'sell_in value can be lower than zero' do
