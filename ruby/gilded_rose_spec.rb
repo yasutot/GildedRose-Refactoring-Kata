@@ -37,7 +37,7 @@ describe '#update_quality' do
     it 'sell_in value can be lower than zero' do
       items = [Item.new('foo', 0, 0)]
       GildedRose.new(items).update_quality
-      expect(items.first.sell_in).to eq - 1
+      expect(items.first.sell_in).to eq -1
     end
   end
 
@@ -45,6 +45,7 @@ describe '#update_quality' do
     before do
       @item_name = 'Aged Brie'
     end
+
     it 'increases quality' do
       items = [Item.new(@item_name, 10, 10)]
       GildedRose.new(items).update_quality
@@ -66,12 +67,24 @@ describe '#update_quality' do
     it 'sell_in value can be lower than zero' do
       items = [Item.new(@item_name, 0, 50)]
       GildedRose.new(items).update_quality
-      expect(items.first.sell_in).to eq - 1
+      expect(items.first.sell_in).to eq -1
     end
   end
 
   context 'when updates Sulfuras' do
-    it 'quality is always 80'
+    before do
+      item_name = 'Sulfuras, Hand of Ragnaros'
+      @items = [Item.new(item_name, 10, 80)]
+      @gilded_rose = GildedRose.new(@items)
+    end
+
+    it 'quality is always 80' do
+      @gilded_rose.update_quality
+      expect(@items.first.quality).to eq 80
+
+      @gilded_rose.update_quality
+      expect(@items.first.quality).to eq 80
+    end
   end
 
   context 'when updates Backstage Pass' do
