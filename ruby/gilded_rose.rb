@@ -30,9 +30,9 @@ class Item
 end
 
 # Names enum of items with custom processors
-class ConditionalItemNames
+class ConditionalNames
   AGED = 'Aged Brie'.freeze
-  BACK = 'Backstage passes to a TAFKAL80ETC concert'.freeze
+  BACK = 'Backstage passes'.freeze
   SULF = 'Sulfuras, Hand of Ragnaros'.freeze
   CONJ = 'Conjured'.freeze
 end
@@ -49,9 +49,10 @@ class Updater
   def processor
     name = @item.name
 
-    return AgedBrieProcessor.new if name == ConditionalItemNames::AGED
-    return SulfurasProcessor.new if name == ConditionalItemNames::SULF
-    return BackstageProcessor.new if name == ConditionalItemNames::BACK
+    return AgedBrieProcessor.new if name == ConditionalNames::AGED
+    return SulfurasProcessor.new if name == ConditionalNames::SULF
+    return BackstageProcessor.new if name.start_with?(ConditionalNames::BACK)
+    return ConjuredProcessor.new if name.start_with?(ConditionalNames::CONJ)
 
     CommonProcessor.new
   end
@@ -98,6 +99,21 @@ class BackstageProcessor
     return 2 if sell_in.between?(7, 10)
 
     1
+  end
+end
+
+# Strategy to process a Conjurer item update.
+class ConjuredProcessor
+  def process(item)
+    # Process the item update
+    item.quality = quality_value(item.sell_in, item.quality)
+    item.sell_in -= 1
+  end
+
+  def quality_value(sell_in, quality)
+    return quality - 4 if sell_in.zero?
+
+    quality - 2
   end
 end
 
