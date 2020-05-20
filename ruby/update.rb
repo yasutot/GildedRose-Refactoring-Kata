@@ -1,5 +1,7 @@
 # frozen_string_literal: false
 
+require 'pry'
+
 module Update
   # Names enum of items with custom processors
   class ConditionalNames
@@ -21,10 +23,10 @@ module Update
     def processor
       name = @item.name
 
+      return ConjuredProcessor if name.start_with?(ConditionalNames::CONJ)
+      return BackstageProcessor if name.start_with?(ConditionalNames::BACK)
       return AgedBrieProcessor if name == ConditionalNames::AGED
       return SulfurasProcessor if name == ConditionalNames::SULF
-      return BackstageProcessor if name.start_with?(ConditionalNames::BACK)
-      return ConjuredProcessor if name.start_with?(ConditionalNames::CONJ)
 
       CommonProcessor
     end
@@ -52,17 +54,19 @@ module Update
   # Backstage Pass update processor.
   class BackstageProcessor
     def process(item)
-      item.quality = quality_value(item.sell_in, item.quality)
+      item.quality = process_quality(item.sell_in, item.quality)
 
       item.sell_in -= 1
     end
 
-    def quality_value(sell_in, quality)
+    def process_quality(sell_in, quality)
       return 0 if sell_in.zero?
 
       quality += quality_increase_value(sell_in)
 
-      50 if quality > 50
+      quality = 50 if quality > 50
+
+      quality
     end
 
     def quality_increase_value(sell_in)
@@ -77,11 +81,11 @@ module Update
   class ConjuredProcessor
     def process(item)
       # Process the item update
-      item.quality = quality_value(item.sell_in, item.quality)
+      item.quality = process_quality(item.sell_in, item.quality)
       item.sell_in -= 1
     end
 
-    def quality_value(sell_in, quality)
+    def process_quality(sell_in, quality)
       return quality - 4 if sell_in.zero?
 
       quality - 2
@@ -91,12 +95,12 @@ module Update
   # Common item update processor.
   class CommonProcessor
     def process(item)
-      item.quality = quality_value(item.sell_in, item.quality)
+      item.quality = process_quality(item.sell_in, item.quality)
 
       item.sell_in -= 1
     end
 
-    def quality_value(sell_in, quality)
+    def process_quality(sell_in, quality)
       return 0 if quality.zero?
       return quality - 1 if sell_in.positive?
 
