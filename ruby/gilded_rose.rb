@@ -2,7 +2,7 @@
 
 require './update.rb'
 
-# Represents Gilded Rose inn items
+
 class GildedRose
   def initialize(items)
     @items = items
