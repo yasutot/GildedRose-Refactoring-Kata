@@ -1,7 +1,5 @@
 # frozen_string_literal: false
 
-require 'pry'
-
 module Update
   # Names enum of items with custom processors
   class ConditionalNames
