@@ -26,7 +26,7 @@ module Update
       return AgedBrieProcessor if name == ConditionalNames::AGED
       return SulfurasProcessor if name == ConditionalNames::SULF
 
-      CommonProcessor
+      return CommonProcessor
     end
 
     def process
@@ -64,14 +64,14 @@ module Update
 
       quality = 50 if quality > 50
 
-      quality
+      return quality
     end
 
     def quality_increase_value(sell_in)
       return 3 if sell_in.between?(1, 6)
       return 2 if sell_in.between?(7, 10)
 
-      1
+      return 1
     end
   end
 
@@ -86,7 +86,7 @@ module Update
     def process_quality(sell_in, quality)
       return quality - 4 if sell_in.zero?
 
-      quality - 2
+      return quality - 2
     end
   end
 
@@ -102,7 +102,7 @@ module Update
       return 0 if quality.zero?
       return quality - 1 if sell_in.positive?
 
-      quality - 2
+      return quality - 2
     end
   end
 end
