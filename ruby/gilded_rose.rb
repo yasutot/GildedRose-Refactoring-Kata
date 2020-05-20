@@ -1,7 +1,6 @@
 # frozen_string_literal: false
 
-require './update.rb'
-
+require File.join(File.dirname(__FILE__), 'update')
 
 class GildedRose
   def initialize(items)
