@@ -3,15 +3,22 @@
 module Update
   # Names enum of items with custom processors
   class ConditionalNames
-    AGED = 'Aged Brie'.freeze
-    BACK = 'Backstage passes'.freeze
-    SULF = 'Sulfuras, Hand of Ragnaros'.freeze
-    CONJ = 'Conjured'.freeze
+    AGED_BRIE = 'Aged Brie'.freeze
+    BACKSTAGE_PASS = 'Backstage passes'.freeze
+    SULFURAS = 'Sulfuras, Hand of Ragnaros'.freeze
+    CONJURED = 'Conjured'.freeze
   end
 
   # Represents the update of an item
   class Processor
     attr_reader :item
+
+    NAMES = {
+      AGED_BRIE: 'Aged Brie',
+      BACKSTAGE_PASS: 'Backstage passes',
+      SULFURAS: 'Sulfuras, Hand of Ragnaros',
+      CONJURED: 'Conjured'
+    }
 
     def initialize(item)
       @item = item
@@ -21,10 +28,10 @@ module Update
     def processor
       name = @item.name
 
-      return ConjuredProcessor if name.start_with?(ConditionalNames::CONJ)
-      return BackstageProcessor if name.start_with?(ConditionalNames::BACK)
-      return AgedBrieProcessor if name == ConditionalNames::AGED
-      return SulfurasProcessor if name == ConditionalNames::SULF
+      return ConjuredProcessor if name.start_with?(NAMES[:CONJURED])
+      return BackstageProcessor if name.start_with?(NAMES[:BACKSTAGE_PASS])
+      return AgedBrieProcessor if name == NAMES[:AGED_BRIE]
+      return SulfurasProcessor if name == NAMES[:SULFURAS]
 
       return CommonProcessor
     end
