@@ -1,14 +1,6 @@
 # frozen_string_literal: false
 
 module Update
-  # Names enum of items with custom processors
-  class ConditionalNames
-    AGED_BRIE = 'Aged Brie'.freeze
-    BACKSTAGE_PASS = 'Backstage passes'.freeze
-    SULFURAS = 'Sulfuras, Hand of Ragnaros'.freeze
-    CONJURED = 'Conjured'.freeze
-  end
-
   # Represents the update of an item
   class Processor
     attr_reader :item
@@ -18,7 +10,7 @@ module Update
       BACKSTAGE_PASS: 'Backstage passes',
       SULFURAS: 'Sulfuras, Hand of Ragnaros',
       CONJURED: 'Conjured'
-    }
+    }.freeze
 
     def initialize(item)
       @item = item
